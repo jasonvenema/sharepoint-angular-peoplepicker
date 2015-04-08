@@ -1,0 +1,11 @@
+{
+  "name": "sp-peoplepicker",
+  "version": "0.1.0",
+  "main": ["sp-peoplepicker.js", "sp-peoplepicker.css"],
+  "ignore": [
+        "screenshot.png"
+  ]
+  "dependencies": {
+    "angular": ">=1.x"
+  }
+}
