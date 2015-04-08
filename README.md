@@ -6,6 +6,12 @@ A client-side people picker control for SharePoint wrapped in an AngularJS direc
 ##How To
 This people picker directive is based on the client side people picker included in the Office Dev/PnP code samples (https://github.com/OfficeDev/PnP). It is entirely JavaScript based, and can be used in an Angular application like so:
 
+```javascript
+var app = angular.module('app', ['sp-peoplepicker']);
+```
+
+Then in your view, the directive can be instantiated like this:
+
 ```html
 <sp-people-picker name="taskAssignee" id="taskAssignee" ng-model="$scope.taskAssignees" min-entries="1" max-entries="5" allow-duplicates="false" show-login="false" show-title="true" min-characters="2" app-web-url="$scope.spAppWebUrl" />
 ```
@@ -20,6 +26,69 @@ If you are using bootstrap and want to add some validation to your form, you can
     <p ng-show="taskForm.taskAssignee.$invalid && !taskForm.taskAssignee.$pristine" class="help-block">You must assign the task to at least 1, but not more than 5 people</p>
   </div>
 </form>
+```
+
+To get the user values from the people picker and, for example, update a user field in SharePoint using the CSOM, you can do the following in your controller:
+
+```javascript
+angular.forEach($scope.taskAssignees, function (value, key) {
+    users.push(SP.FieldUserValue.fromUser(value.Login));
+});
+listItem.set_item('AssignedTo', users);
+listItem.update();
+```
+
+By way of a longer example, you could update the Tasks list in your app's Host Web by invoking the following function from your controller:
+
+```javascript
+function saveTask(task) {
+  var dfd = $q.defer();
+  var ctx = getSpCtx();
+  var hostWeb = getHostWeb(ctx);
+  var list = hostWeb.get_lists().getByTitle('Tasks');
+  var listItemCreation = new SP.ListItemCreationInformation();
+  var listItem = list.addItem(listItemCreation);
+  listItem.set_item('Title', task.Title);
+  listItem.set_item('Body', task.Body);
+  listItem.set_item('DueDate', task.DueDate);
+  listItem.set_item('_Category', task.Category);
+
+  var users = [];
+  angular.forEach(task.AssignedToId, function (value, key) {
+      users.push(SP.FieldUserValue.fromUser(value.Login));
+  });
+  listItem.set_item('AssignedTo', users);
+  listItem.update();
+  ctx.load(listItem);
+  ctx.executeQueryAsync(Function.createDelegate(this, saveComplete), Function.createDelegate(this, saveFailed));
+
+  function saveComplete() {
+      dfd.resolve(listItem);
+  }
+
+  function saveFailed(sender, args) {
+      console.log("XHR failed for task create POST: " + args.get_message());
+      dfd.reject(args.get_message());
+  }
+
+  return dfd.promise;
+}
+
+function getSpCtx() {
+    // get SPAppWebUrl from the {StandardTokens} query parameters
+    var ctx = new SP.ClientContext(spappcontext.hostWeb.SPAppWebUrl);
+    var factory = new SP.ProxyWebRequestExecutorFactory(spappcontext.hostWeb.SPAppWebUrl);
+    ctx.set_webRequestExecutorFactory(factory);
+    return ctx;
+}
+
+function getHostWeb(ctx) {
+    // get SPHostUrl from {StandardTokens} query parameters
+    var hostWebctx = new SP.AppContextSite(ctx, spappcontext.hostWeb.SPHostUrl);
+    var appWeb = ctx.get_web();
+    var hostWeb = hostWebctx.get_web();
+    return hostWeb;
+}
 ```
 
 ##Arguments
