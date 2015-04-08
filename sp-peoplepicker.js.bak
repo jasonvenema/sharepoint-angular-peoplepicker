@@ -1,6 +1,8 @@
 ﻿(function () {
 
-    angular.module('sp-peoplepicker', []).directive('spPeoplePicker', function () {
+    var app = angular.module('app');
+
+    app.directive('spPeoplePicker', ['config', function (config) {
         //Usage:
         //<sp-people-picker name="taskAssignee" id="taskAssignee" data-ng-model="$scope.taskAssignees" min-entries="1" max-entries="5" allow-duplicates="false" show-login="false" show-title="true" min-characters="2" app-web-url="$scope.spAppWebUrl" />
         var directive = {
@@ -94,7 +96,7 @@
                 ngModel.$setValidity('required', valid);
             }
         }
-    });
+    }]);
 
     var CAMControl;
     (function (CAMControl) {
