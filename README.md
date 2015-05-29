@@ -102,4 +102,4 @@ function getHostWeb(ctx) {
 * **app-web-url**: The absolute URL to the App Web for the provider hosted app. More information on obtaining this below.
 
 ##Obtaining the App Web URL
-The App Web URL for a SharePoint provider hosted app is normally passed to the application as a query parameter. Most provider hosted applications will need to have access to this URL for making API calls back to the App Web. If you are not receiving the App Web URL in your query parameters, you will want to check the AppManifest.xml file for your application aand ensure that the **Query string** is configured to pass the '{StandardTokens}' expression.
+The App Web URL for a SharePoint provider hosted app is normally passed to the application as a query parameter. Most provider hosted applications will need to have access to this URL for making API calls back to the App Web. If you are not receiving the App Web URL in your query parameters, you will want to check the AppManifest.xml file for your application and ensure that the **query string** is configured to pass the '{StandardTokens}' expression.
