@@ -528,7 +528,7 @@
                                     resultDisplay = resultsSearching;
                                 }
                                 var searchbusy = parent.Format('<div class=\'ms-emphasisBorder\' style=\'width: 400px; padding: 4px; border-left: none; border-bottom: none; border-right: none; cursor: default;\'>{0}</div>', resultDisplay);
-                                parent.PeoplePickerDisplay.html(this.$compile(searchbusy)(parent.$scope));
+                                parent.PeoplePickerDisplay.html(parent.$compile(searchbusy)(parent.$scope));
                                 //display the suggestion box
                                 parent.ShowSelectionBox();
 
