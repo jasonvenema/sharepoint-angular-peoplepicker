@@ -86,7 +86,7 @@
                 // Set principal type to determine what is shown (default = 1, only users are resolved).
                 // See http://msdn.microsoft.com/en-us/library/office/microsoft.sharepoint.client.utilities.principaltype.aspx for more details
                 // Set ShowLoginName and ShowTitle to false if you're resolving groups
-                scope.peoplePicker.PrincipalType = 1;
+                scope.peoplePicker.PrincipalType = SP.Utilities.PrincipalType.all;
                 // start user resolving as of 2 entered characters (= default)
                 scope.peoplePicker.MinimalCharactersBeforeSearching = scope.minCharacters;
                 // Hookup everything
